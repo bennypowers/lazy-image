@@ -1,0 +1,30 @@
+{
+  "name": "@power-elements/lazy-image",
+  "version": "1.0.1",
+  "description": "Lazy loads images with IntersectionObserver",
+  "main": "lazy-image.js",
+  "scripts": {
+    "test": "polymer test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bennypowers/lazy-image.git"
+  },
+  "keywords": [
+    "custom",
+    "element",
+    "lazy",
+    "loading",
+    "lit-html",
+    "performance"
+  ],
+  "author": "Benny Powers",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/bennypowers/lazy-image/issues"
+  },
+  "homepage": "https://github.com/bennypowers/lazy-image#readme",
+  "dependencies": {
+    "@polymer/lit-element": "^0.2.2"
+  }
+}
