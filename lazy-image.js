@@ -1,5 +1,7 @@
-import { LitElement, html } from '/node_modules/@polymer/lit-element/lit-element.js';
-import { compose, map, prop, some } from './lib.js';
+import { LitElement, html } from '../../@polymer/lit-element/lit-element.js';
+import { compose, identity } from '../power-functions/combinators.js';
+import { map, some } from '../power-functions/array.js';
+import { prop } from '../power-functions/object.js';
 
 /**
  * Lazy Image loads an image lazily!
