@@ -13,25 +13,25 @@ class LazyImage extends LitElement {
 
   static get properties() {
     return {
-			/** Alt value for image. */
+      /** Alt value for image. */
       alt: String,
 
-			/** Whether or not the image has intersected. */
+      /** Whether or not the image has intersected. */
       intersecting: Boolean,
 
-			/** Placeholder image string. */
+      /** Placeholder image string. */
       placeholder: String,
 
-			/** Margin into the image which determines when the IntersectionObserver fires. */
+      /** Margin into the image which determines when the IntersectionObserver fires. */
       rootMargin: String,
 
-			/** img src */
+      /** img src */
       src: String,
 
-			/** img src */
+      /** img src */
       fade: Boolean,
 
-			/** Threshold at which to trigger intersection. */
+      /** Threshold at which to trigger intersection. */
       threshold: Number,
     };
   }
@@ -45,55 +45,65 @@ class LazyImage extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    const {rootMargin, threshold} = this;
+    const {
+      rootMargin,
+      threshold
+    } = this;
 
     const setIntersecting = b => (this.intersecting = b || this.intersecting, b);
 
-		const unloadIfIntersecting = intersecting => {
-			if (intersecting) this.observer = null;
-		};
+    const unloadIfIntersecting = intersecting => {
+      if (intersecting) this.observer = null;
+    };
 
     this.observer = new IntersectionObserver(
-			compose(
-				unloadIfIntersecting,
-				setIntersecting,
-				some(x => x),
-				map(prop('isIntersecting'))
-			),
-			{rootMargin, threshold}
-		);
+      compose(
+        unloadIfIntersecting,
+        setIntersecting,
+        some(identity),
+        map(prop('isIntersecting'))
+      ), { rootMargin, threshold }
+    );
 
-		this.observer
-			.observe(this);
+    this.observer
+      .observe(this);
   }
 
-  render({alt, intersecting, placeholder, src, fade}) {
-    return html`
-			<style>
-			:host {
-				display: block;
-				width: 100%;
-			}
+  render({
+    alt,
+    fade,
+    intersecting,
+    placeholder,
+    src,
+  }) {
+    return html `
+      <style>
+      :host {
+        display: block;
+        width: 100%;
+      }
 
-			img {
-				display: block;
-				width: 100%;
-			}
+      img {
+        display: block;
+        width: 100%;
+        height: var(--lazy-image-img-height, auto);
+        object-fit: var(--lazy-image-img-object-fit, contain);
+      }
 
-			.fade {
-				opacity: 0;
-				transition: opacity 0.5s ease;
-			}
+      .fade {
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
 
-			.intersecting {
-				opacity: 1;
-			}
+      .intersecting {
+        opacity: 1;
+      }
+    </style>
 
-      <img alt$="${alt}"
-          src$="${intersecting ? src : placeholder}"
-          class$="${intersecting ? 'intersecting' : ''} ${fade ? 'fade' : ''}"/>`;
+    <img alt$="${alt}"
+        src$="${intersecting ? src : placeholder}"
+        class$="${intersecting ? 'intersecting' : ''} ${fade ? 'fade' : ''}"/>`;
   }
 }
 
 customElements.define('lazy-image', LazyImage);
-
