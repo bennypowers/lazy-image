@@ -1,0 +1,9 @@
+{
+  "extends": ["eslint:recommended"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "rules": {
+    "max-len": [2, {"ignoreComments": true}]
+  }
+}

@@ -71,13 +71,7 @@ class LazyImage extends LitElement {
       .observe(this);
   }
 
-  render({
-    alt,
-    fade,
-    intersecting,
-    placeholder,
-    src,
-  }) {
+  _render({alt, fade, intersecting, placeholder, src}) {
     return html `
       <style>
       :host {
