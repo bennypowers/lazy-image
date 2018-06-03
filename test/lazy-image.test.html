@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="/node_modules/web-component-tester/browser.js"></script>
+  <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script type="module" src="@polymer/test-fixture/test-fixture.js"></script>
+  <script type="module" src="@polymer/test-fixture/test-fixture-mocha.js"></script>
+</head>
+<body>
+  <test-fixture id="fixture">
+    <template>
+      <lazy-image alt="ALT" fade src=""></lazy-image>
+    </template>
+  </test-fixture>
+
+  <script type="module">
+    import '@polymer/test-fixture/test-fixture.js'
+    import '@polymer/test-fixture/test-fixture-mocha.js'
+    import '../lazy-image.js'
+
+    // eslint-disable-next-line max-len
+    const src = 'data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7';
+
+    const getImg = lazy => lazy.shadowRoot.querySelector('img');
+
+    suite('<lazy-image>', function() {
+      const lazy = fixture('fixture');
+      test('sets up an intersection observer', function() {
+        assert.isTrue(lazy.observer instanceof IntersectionObserver);
+      });
+
+      test('sets image src property', function() {
+        lazy.src = src;
+        assert.isTrue(getImg(lazy).src === src);
+      });
+    });
+  </script>
+</body>
+</html>

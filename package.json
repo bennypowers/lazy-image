@@ -27,5 +27,13 @@
   "dependencies": {
     "@polymer/lit-element": "^0.5.1",
     "@power-elements/power-functions": "^1.0.0"
+  },
+  "devDependencies": {
+    "@polymer/iron-test-helpers": "^3.0.0-pre.19",
+    "@polymer/test-fixture": "^3.0.0-pre.19",
+    "mocha": "^5.2.0",
+    "polymer-cli": "^1.7.0-pre.17",
+    "wct-browser-legacy": "^1.0.1",
+    "web-component-tester": "^6.6.0"
   }
 }

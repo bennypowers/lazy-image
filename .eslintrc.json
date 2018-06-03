@@ -4,6 +4,6 @@
     "sourceType": "module"
   },
   "rules": {
-    "max-len": [2, {"ignoreComments": true}]
+    "max-len": ["error", { "ignoreComments": true }]
   }
 }
