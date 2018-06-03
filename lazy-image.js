@@ -8,12 +8,18 @@ const when = (p, f) => (x) => p(x) ? f(x) : constant(x);
 const isTrue = (p) => !!p;
 
 /**
- * Lazy Image loads an image lazily!
+ * `<lazy-image>` loads an image lazily!
  *
  * ## Usage
  * ```html
- * <lazy-image src="/image.jpg" alt="Lazy Image"></lazy-image>
+ * <lazy-image fade src="/image.jpg" alt="Lazy Image"></lazy-image>
  * ```
+ *
+ * ## Styling
+ * - `--lazy-image-img-height` applies to the height property of the img element (default: `auto`)
+ * - `--lazy-image-img-object-fit` applies to the object-fit property of the img element (default: `contain`)
+ * - `--lazy-image-fade-timing` applies to the `transition: opacity` property of the img element when `fade` is true. (default: `0.5s`)
+ * - `--lazy-image-fade-easing` applies to the `transition: opacity` property of the img element when `fade` is true. (default: `ease`)
  */
 class LazyImage extends LitElement {
   static get properties() {
@@ -22,11 +28,11 @@ class LazyImage extends LitElement {
       alt: String,
       /** Whether or not the image has intersected. */
       intersecting: Boolean,
-      /** Placeholder image string. */
+      /** Placeholder image URI. */
       placeholder: String,
       /** Margin around the element within which the IntersectionObserver fires. */
       rootMargin: String,
-      /** img src */
+      /** Image URI */
       src: String,
       /** Whether or not the image should fade into view. */
       fade: Boolean,
@@ -78,7 +84,7 @@ class LazyImage extends LitElement {
 
       [fade] {
         opacity: 0;
-        transition: opacity 0.5s ease;
+        transition: opacity var(--lazy-image-fade-timing, 0.5s) var(--lazy-image-fade-easing, ease);
       }
 
       [intersecting] {
