@@ -1,4 +1,9 @@
-# \<lazy-image>
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/@power-elements/lazy-image)
+[![npm (scoped)](https://img.shields.io/npm/v/@cycle/core.svg)](https://www.npmjs.com/package/@power-elements/lazy-image)
+[![Build Status](https://travis-ci.org/bennypowers/lazy-image.svg?branch=master)](https://travis-ci.org/bennypowers/lazy-image)
+
+# <lazy-image\>
+
 
 Lazily load your images
 

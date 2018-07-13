@@ -193,6 +193,7 @@ class LazyImage extends HTMLElement {
     this.initIntersectionObserver(this);
   }
 
+  /** @protected */
   connectedCallback() {
     this.initIntersectionObserver(this);
     this.attachShadow({mode: 'open'})
@@ -232,7 +233,7 @@ class LazyImage extends HTMLElement {
    * Sets the intersecting property
    * @param {Boolean} intersecting
    * @return {Boolean}
-   * @property
+   * @protected
    */
   setIntersecting(intersecting) {
     this.intersecting = (intersecting || this.intersecting)
