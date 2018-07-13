@@ -10,10 +10,10 @@ npm -i -S @power-elements/lazy-image
 ## 📦 Load it!
 ```html
 <!-- From CDN -->
-<script async type="module" src="https://unpkg.com/@power-elements@latest/lazy-image/lazy-image.js"></script>
+<script async type="module" src="https://unpkg.com/@power-elements/lazy-image/lazy-image.js"></script>
 
 <!-- From local installation -->
-<script async type="module" src="/node_modules/@power-elements@latest/lazy-image/lazy-image.js"></script>
+<script async type="module" src="/node_modules/@power-elements/lazy-image/lazy-image.js"></script>
 ```
 
 ## 💪 Use it!
