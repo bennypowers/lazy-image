@@ -2,7 +2,6 @@ language: node_js
 sudo: required
 before_script:
   - npm install -g polymer-cli
-  - bower install --allow-root
 node_js: stable
 addons:
   firefox: latest
