@@ -4,7 +4,7 @@
   "description": "Lazy loads images with IntersectionObserver",
   "main": "lazy-image.js",
   "scripts": {
-    "test": "polymer test"
+    "test": "polymer test --module-resolution=node --npm"
   },
   "repository": {
     "type": "git",
@@ -19,21 +19,17 @@
     "performance"
   ],
   "author": "Benny Powers",
-  "license": "GPL-3.0",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/bennypowers/lazy-image/issues"
   },
   "homepage": "https://github.com/bennypowers/lazy-image#readme",
-  "dependencies": {
-    "@polymer/lit-element": "^0.5.1",
-    "@power-elements/power-functions": "^1.0.0"
-  },
   "devDependencies": {
-    "@polymer/iron-test-helpers": "^3.0.0-pre.19",
-    "@polymer/test-fixture": "^3.0.0-pre.19",
+    "@polymer/iron-test-helpers": "^3.0.0-pre.21",
+    "@polymer/test-fixture": "^3.0.0-pre.21",
     "mocha": "^5.2.0",
-    "polymer-cli": "^1.7.0-pre.17",
+    "polymer-cli": "^1.7.7",
     "wct-browser-legacy": "^1.0.1",
-    "web-component-tester": "^6.6.0"
+    "web-component-tester": "^6.7.0"
   }
 }

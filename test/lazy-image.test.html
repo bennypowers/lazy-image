@@ -2,21 +2,25 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <script src="/node_modules/web-component-tester/browser.js"></script>
-  <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  <script type="module" src="@polymer/test-fixture/test-fixture.js"></script>
-  <script type="module" src="@polymer/test-fixture/test-fixture-mocha.js"></script>
+  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../../../web-component-tester/browser.js"></script>
 </head>
 <body>
-  <test-fixture id="fixture">
+
+  <test-fixture id="no-attr">
     <template>
-      <lazy-image alt="ALT" fade src=""></lazy-image>
+      <lazy-image></lazy-image>
     </template>
   </test-fixture>
 
+  <test-fixture id="src-attr">
+    <template>
+      <lazy-image style="transform: translateY(100vh)" src="http://placekitten.com/400/300"></lazy-image>
+    </template>
+  </test-fixture>
+
+
   <script type="module">
-    import '@polymer/test-fixture/test-fixture.js'
-    import '@polymer/test-fixture/test-fixture-mocha.js'
     import '../lazy-image.js'
 
     // eslint-disable-next-line max-len
@@ -25,16 +29,23 @@
     const getImg = lazy => lazy.shadowRoot.querySelector('img');
 
     suite('<lazy-image>', function() {
-      const lazy = fixture('fixture');
-      test('sets up an intersection observer', function() {
+      const lazy = fixture('no-attr');
+      test('has an img element in shadow root', function() {
+        assert.isTrue(lazy.__img instanceof HTMLImageElement);
+      });
+    });
+
+    suite('<lazy-image src="url/to/img">', function() {
+      const lazy = fixture('src-attr');
+      test('initializes an IntersectionObserver', function() {
         assert.isTrue(lazy.observer instanceof IntersectionObserver);
       });
 
-      test('sets image src property', function() {
-        lazy.src = src;
-        assert.isTrue(getImg(lazy).src === src);
+      test('does not set img src', function() {
+        assert.notOk(lazy.__img.src);
       });
     });
+
   </script>
 </body>
 </html>
