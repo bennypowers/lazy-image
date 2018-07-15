@@ -1,9 +1,9 @@
 const compose = (...fns) => fns.reduce((f, g) => (...args) => f(g(...args)));
 const map = f => as => as.map(f)
 const some = f => as => as.some(f)
-const constant = (x) => () => x;
-const when = (p, f) => (x) => p(x) ? f(x) : constant(x);
-const isTruthy = (p) => !!p;
+const constant = x => () => x;
+const when = (p, f) => x => p(x) ? f(x) : constant(x);
+const isTruthy = p => !!p;
 
 const anyIntersecting = compose(
   some(Boolean),
@@ -15,8 +15,8 @@ const getBackgroundImageString = placeholder =>
 
 /**
  * Initializes the template with this.alt and this.placeholder.
- * @param  {String} [alt='']          image alt text
- * @param  {String} [placeholder=''}] placeholder image. preferable a datauri
+ * @param  {String} alt          image alt text
+ * @param  {String} placeholder  placeholder image. preferable a datauri
  * @return {HTMLTemplateElement}
  */
 const getTemplate = ({alt, placeholder}) => {
@@ -63,10 +63,15 @@ const getTemplate = ({alt, placeholder}) => {
  * ```
  *
  * ## Styling
- * - `--lazy-image-img-height` applies to the height property of the img element (default: `auto`)
- * - `--lazy-image-img-object-fit` applies to the object-fit property of the img element (default: `contain`)
- * - `--lazy-image-fade-timing` applies to the `transition: opacity` property of the img element when `fade` is true. (default: `0.5s`)
- * - `--lazy-image-fade-easing` applies to the `transition: opacity` property of the img element when `fade` is true. (default: `ease`)
+ *
+ * The following custom properties and mixins are available for styling:
+ *
+ * Custom property | Description | Default
+ * ----------------|-------------|----------
+ * `--lazy-image-img-height` | applies to the height property of the img element | auto
+ * `--lazy-image-img-object-fit` | applies to the object-fit property of the img element | contain
+ * `--lazy-image-fade-timing` | applies to the `transition: opacity` property of the img element when `fade` is true. | 0.5s
+ * `--lazy-image-fade-easing` | applies to the `transition: opacity` property of the img element when `fade` is true. | ease
  *
  * @customElement
  * @extends HTMLElement
@@ -213,7 +218,7 @@ class LazyImage extends HTMLElement {
    */
   initIntersectionObserver({ root, rootMargin, threshold }) {
     const callback = compose(
-      when(isTruthy, this.deleteObserver.bind(this)),
+      when(isTruthy, this.disconnectObserver.bind(this)),
       this.setIntersecting.bind(this),
       anyIntersecting
     );
@@ -241,10 +246,12 @@ class LazyImage extends HTMLElement {
   }
 
   /**
-   * Deletes the IntersectionObserver
+   * Disconnects and Deletes the IntersectionObserver
    * @protected
    */
-  deleteObserver() {
+  disconnectObserver() {
+    this.observer.disconnect();
+    this.observer = null;
     delete this.observer;
   }
 }
