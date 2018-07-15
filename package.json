@@ -1,6 +1,6 @@
 {
   "name": "@power-elements/lazy-image",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Lazy loads images with IntersectionObserver",
   "main": "lazy-image.js",
   "scripts": {
