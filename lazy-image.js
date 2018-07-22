@@ -200,9 +200,11 @@ class LazyImage extends HTMLElement {
 
   /** @protected */
   connectedCallback() {
-    this.initIntersectionObserver(this);
     this.attachShadow({mode: 'open'})
       .appendChild(getTemplate(this).content.cloneNode(true))
+    ('IntersectionObserver' in window)
+      ? this.initIntersectionObserver(this)
+      : this.setIntersecting(true)
 
     this.placeholder = this.getAttribute('placeholder')
   }

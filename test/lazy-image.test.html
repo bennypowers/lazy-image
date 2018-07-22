@@ -46,6 +46,22 @@
       });
     });
 
+    suite('"IntersectionObserver" not in window', function() {
+      let hasNative = ('IntersectionObserver' in window);
+      let IntersectionObserver;
+      if (hasNative) {
+        IntersectionObserver = window.IntersectionObserver;
+        delete window.IntersectionObserver;
+      }
+      const lazy = fixture('src-attr');
+      test('sets img src immediately', function() {
+        assert.ok(lazy.__img.src);
+      });
+      if (hasNative) {
+        window.IntersectionObserver = IntersectionObserver;
+      }
+    });
+
   </script>
 </body>
 </html>
