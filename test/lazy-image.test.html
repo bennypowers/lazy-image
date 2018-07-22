@@ -42,7 +42,7 @@
       });
 
       test('does not set img src', function() {
-        assert.notOk(lazy.__img.src);
+        assert.notEqual(lazy.__img.src, 'http://placekitten.com/400/300');
       });
     });
 
