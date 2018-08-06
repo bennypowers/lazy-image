@@ -1,6 +1,6 @@
 {
   "name": "@power-elements/lazy-image",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Lazy loads images with IntersectionObserver",
   "main": "lazy-image.js",
   "scripts": {
@@ -10,9 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/bennypowers/lazy-image.git"
   },
-	"logo":  {
-		"file": "./logo.png"
-	},
+  "logo": {
+    "file": "./logo.png"
+  },
   "keywords": [
     "custom",
     "element",
