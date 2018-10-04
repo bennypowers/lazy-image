@@ -14,11 +14,8 @@
     "file": "./logo.png"
   },
   "keywords": [
-    "custom",
-    "element",
-    "lazy",
-    "loading",
-    "lit-html",
+    "custom element",
+    "lazy loading",
     "performance"
   ],
   "author": "Benny Powers",

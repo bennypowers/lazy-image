@@ -19,12 +19,38 @@ npm -i -S @power-elements/lazy-image
 
 <!-- From local installation -->
 <script async type="module" src="/node_modules/@power-elements/lazy-image/lazy-image.js"></script>
+
+<!-- In a Module -->
+<script type="module">
+  import '/node_modules/@power-elements/lazy-image/lazy-image.js';
+  // ...
+</script>
 ```
 
 ## 💪 Use it!
 ```html
-<lazy-image src="/image.jpg" alt="Lazy Image"></lazy-image>
+<lazy-image src="image.jpg" alt="Lazy Image"></lazy-image>
 ```
+
+## 💄 Style it!
+You should give your `<lazy-image>` elements some specific dimensions, since it absolutely positions its shadow children.
+
+```css
+lazy-image {
+  width: 400px;
+  height: 20vh;
+}
+```
+
+`<lazy-image>` exposes a set of custom properties for your customizing delight:
+
+Property|Purpose|Default
+-----|-----|-----
+`--lazy-image-width`|Width of the internal image and placeholder elements|100%
+`--lazy-image-height`|Height of the internal image and placeholder elements|100%
+`--lazy-image-fit`|[`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) property of the internal image and placeholder elements|contain
+`--lazy-image-fade-duration`|Duration of the fade in from the placeholder to the image. Set to 0 to disable fading.|0.3s
+`--lazy-image-fade-easing`|[`ease`](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function) property of the opacity transition for the image and placeholder|ease
 
 ### Browser support
 `lazy-image` manages the loading of your images via an Intersection Observer. In browsers where an Intersection Observer is not present, your images will be loaded immediately much like standard `<img/>` elements. Conditionally delivering the [IntersectionObserver polyfill](https://github.com/w3c/IntersectionObserver/tree/master/polyfill) along with your `lazy-image`s to your users will ensure that all users experience the benefits of loading images lazily. Stay lazy, friend!
