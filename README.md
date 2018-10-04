@@ -29,7 +29,9 @@ npm -i -S @power-elements/lazy-image
 
 ## 💪 Use it!
 ```html
-<lazy-image src="image.jpg" alt="Lazy Image"></lazy-image>
+<lazy-image src="image.jpg" alt="Lazy Image">
+  <svg slot="placeholder"><use xlink:href="#placeholder-svg"></use></svg>
+</lazy-image>
 ```
 
 ## 💄 Style it!
