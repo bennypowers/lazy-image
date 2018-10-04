@@ -4,8 +4,7 @@
 
 # <lazy-image\>
 
-
-Lazily load your images
+Lazily load your images!
 
 ## 🚛 Get it!
 ```
@@ -33,6 +32,8 @@ npm -i -S @power-elements/lazy-image
   <svg slot="placeholder"><use xlink:href="#placeholder-svg"></use></svg>
 </lazy-image>
 ```
+
+The optional placeholder could be any element. Inline <abbr title="Scalable Vector Graphics">SVG</abbr>, Pure <abbr title="Cascading Style Sheets">CSS</abbr> graphics, or an `<img src="data:foo"/>` would work best.
 
 ## 💄 Style it!
 You should give your `<lazy-image>` elements some specific dimensions, since it absolutely positions its shadow children.

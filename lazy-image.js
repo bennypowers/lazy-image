@@ -106,25 +106,18 @@ class LazyImage extends HTMLElement {
   }
 
   connectedCallback() {
-    // Remove the wrapping `<lazy-image>` element from the a11y tree.
     this.setAttribute('role', 'presentation');
-    // Initialize shady styles if needed
     this.updateShadyStyles();
     if (!this.shadowRoot) {
-      // create shadow tree
       this.attachShadow({mode: 'open'});
       this.shadowRoot.appendChild(template.content.cloneNode(true));
-      // cache useful shadow selectors
       this.shadowImage = this.shadowRoot.getElementById('image');
       this.shadowPlaceholder = this.shadowRoot.getElementById('placeholder');
-      // initialize pre-upgrade attributes
       this.src = this.getAttribute('src');
       this.alt = this.getAttribute('alt');
       this.placeholder = this.getAttribute('placeholder');
     }
-    // if IntersectionObserver is available, initialize it.
     if ('IntersectionObserver' in window) this.initIntersectionObserver();
-    // if IntersectionObserver is unavailable, simply load the image.
     else this.intersecting = true;
   }
 
@@ -170,7 +163,6 @@ class LazyImage extends HTMLElement {
    */
   initIntersectionObserver() {
     if (this.observer) return;
-    // Start loading the image 10px before it appears on screen
     const rootMargin = '10px';
     this.observer =
       new IntersectionObserver(this.observerCallback, { rootMargin });
