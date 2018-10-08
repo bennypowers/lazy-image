@@ -4,8 +4,20 @@
   <meta charset="utf-8">
   <script src="../../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
   <script src="../../../web-component-tester/browser.js"></script>
+  <script src="../../../sinon/pkg/sinon.js"></script>
 </head>
 <body>
+
+  <style>
+  :root {
+    --lazy-image-width: 100px;
+    --lazy-image-height: 100px;
+  }
+  lazy-image {
+    width: var(--lazy-image-width);
+    height: var(--lazy-image-height);
+  }
+  </style>
 
   <test-fixture id="no-attr">
     <template>
@@ -15,10 +27,9 @@
 
   <test-fixture id="src-attr">
     <template>
-      <lazy-image style="transform: translateY(100vh)" src="http://placekitten.com/400/300"></lazy-image>
+      <lazy-image style="position: fixed; left: -10000px;" src="data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7"></lazy-image>
     </template>
   </test-fixture>
-
 
   <script type="module">
     import '../lazy-image.js'
@@ -26,39 +37,49 @@
     // eslint-disable-next-line max-len
     const src = 'data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7';
 
+    let lazy;
+
     const getImg = lazy => lazy.shadowRoot.querySelector('img');
 
     suite('<lazy-image>', function() {
-      const lazy = fixture('no-attr');
+      suiteSetup(() => lazy = fixture('no-attr'))
       test('has an img element in shadow root', function() {
-        assert.isTrue(lazy.__img instanceof HTMLImageElement);
+        assert.isTrue(getImg(lazy) instanceof HTMLImageElement);
       });
     });
 
     suite('<lazy-image src="url/to/img">', function() {
-      const lazy = fixture('src-attr');
-      test('initializes an IntersectionObserver', function() {
-        assert.isTrue(lazy.observer instanceof IntersectionObserver);
-      });
+      if ("IntersectionObserver" in window) {
+        suite('"IntersectionObserver" supported', function() {
+          suiteSetup(() => lazy = fixture('src-attr'));
+          test('initializes an IntersectionObserver', function() {
+            assert.isTrue(lazy.observer instanceof IntersectionObserver);
+          });
 
-      test('does not set img src', function() {
-        assert.notEqual(lazy.__img.src, 'http://placekitten.com/400/300');
-      });
-    });
+          test('does not set img src', function() {
+            assert.notOk(getImg(lazy).src);
+          });
 
-    suite('"IntersectionObserver" not in window', function() {
-      let hasNative = ('IntersectionObserver' in window);
-      let IntersectionObserver;
-      if (hasNative) {
-        IntersectionObserver = window.IntersectionObserver;
-        delete window.IntersectionObserver;
-      }
-      const lazy = fixture('src-attr');
-      test('sets img src immediately', function() {
-        assert.ok(lazy.__img.src);
-      });
-      if (hasNative) {
-        window.IntersectionObserver = IntersectionObserver;
+          test('Loads image when intersecting', function theTest() {
+            lazy.intersecting = true;
+            assert.equal(getImg(lazy).src, src);
+          })
+
+          // heck
+          test.skip('observerCallback should fire', function theTest() {
+            sinon.spy(lazy, 'observerCallback')
+            lazy.style.left = 0;
+            assert.isTrue(lazy.observerCallback.called)
+            lazy.observerCallback.restore();
+          })
+        });
+      } else {
+        suite('"IntersectionObserver" not supported', function() {
+          suiteSetup(() => lazy = fixture('src-attr'));
+          test('sets img src immediately', function() {
+            assert.ok(getImg(lazy).src);
+          });
+        });
       }
     });
 

@@ -176,6 +176,7 @@ class LazyImage extends HTMLElement {
    * @protected
    */
   disconnectObserver() {
+    if (!this.observer) return;
     this.observer.disconnect();
     this.observer = null;
     delete this.observer;
