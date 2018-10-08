@@ -182,5 +182,4 @@ class LazyImage extends HTMLElement {
   }
 }
 
-const register = () => customElements.define(tagName, LazyImage);
-window.WebComponents ? window.WebComponents.waitFor(register) : register();
+customElements.define(tagName, LazyImage);
