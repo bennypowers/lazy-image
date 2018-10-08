@@ -36,13 +36,22 @@ npm -i -S @power-elements/lazy-image
 The optional placeholder could be any element. Inline <abbr title="Scalable Vector Graphics">SVG</abbr>, Pure <abbr title="Cascading Style Sheets">CSS</abbr> graphics, or an `<img src="data:foo"/>` would work best.
 
 ## 💄 Style it!
-You should give your `<lazy-image>` elements some specific dimensions, since it absolutely positions its shadow children.
+You should give your `<lazy-image>` elements some specific dimensions, since it absolutely positions its shadow children. In most cases, you should set the wrapping element as well as the `--lazy-image-` custom properties to the known display dimensions of your image.
 
-```css
-lazy-image {
-  width: 400px;
-  height: 20vh;
+```html
+<style>
+html {
+  --lazy-image-width: 640px;
+  --lazy-image-height: 480px;
 }
+
+lazy-image {
+  width: var(--lazy-image-width);
+  height: var(--lazy-image-height);
+}
+</style>
+
+<lazy-image src="https://fillmurray.com/640/480"></lazy-image>
 ```
 
 `<lazy-image>` exposes a set of custom properties for your customizing delight:
