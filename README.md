@@ -1,6 +1,7 @@
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/@power-elements/lazy-image)
 [![npm (scoped)](https://img.shields.io/npm/v/@cycle/core.svg)](https://www.npmjs.com/package/@power-elements/lazy-image)
 [![Build Status](https://travis-ci.org/bennypowers/lazy-image.svg?branch=master)](https://travis-ci.org/bennypowers/lazy-image)
+[![Contact me on Codementor](https://cdn.codementor.io/badges/contact_me_github.svg)](https://www.codementor.io/bennyp?utm_source=github&utm_medium=button&utm_term=bennyp&utm_campaign=github)
 
 # <lazy-image\>
 
