@@ -1,40 +1,42 @@
-import { LitElement, html } from '@polymer/lit-element';
+import { LitElement, css, html } from 'lit-element';
 
 const isIntersecting = ({ isIntersecting }) => isIntersecting;
 
 class LitLazyImage extends LitElement {
+  static get styles() {
+    return css`
+      :host {
+        position: relative;
+      }
+
+      #image,
+      #placeholder ::slotted(*) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition:
+          opacity
+          var(--lazy-image-fade-duration, 0.3s)
+          var(--lazy-image-fade-easing, ease);
+        object-fit: var(--lazy-image-fit, contain);
+        width: var(--lazy-image-width, 100%);
+        height: var(--lazy-image-height, 100%);
+      }
+
+      #placeholder ::slotted(*),
+      :host([loaded]) #image {
+        opacity: 1;
+      }
+
+      #image,
+      :host([loaded]) #placeholder ::slotted(*) {
+        opacity: 0;
+      }
+    `;
+  }
+
   render() {
     return html`
-      <style>
-        :host {
-          position: relative;
-        }
-
-        #image,
-        #placeholder ::slotted(*) {
-          position: absolute;
-          top: 0;
-          left: 0;
-          transition:
-            opacity
-            var(--lazy-image-fade-duration, 0.3s)
-            var(--lazy-image-fade-easing, ease);
-          object-fit: var(--lazy-image-fit, contain);
-          width: var(--lazy-image-width, 100%);
-          height: var(--lazy-image-height, 100%);
-        }
-
-        #placeholder ::slotted(*),
-        :host([loaded]) #image {
-          opacity: 1;
-        }
-
-        #image,
-        :host([loaded]) #placeholder ::slotted(*) {
-          opacity: 0;
-        }
-      </style>
-
       <div id="placeholder" aria-hidden="${String(!!this.intersecting)}">
         <slot name="placeholder"></slot>
       </div>
