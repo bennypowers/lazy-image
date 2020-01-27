@@ -1,6 +1,6 @@
 {
   "name": "@power-elements/lazy-image",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Lazy loads images with IntersectionObserver",
   "main": "lazy-image.js",
   "module": "lazy-image.js",
@@ -31,6 +31,14 @@
     "lit-html": "^1.1.2",
     "sinon": "^8.1.1"
   },
+  "files": [
+    "README.md",
+    "CHANGELOG.md",
+    "lazy-image.js",
+    "index.html",
+    "LICENSE",
+    "examples/*"
+  ],
   "release": {
     "branches": [
       "master"
