@@ -23,13 +23,13 @@ template.innerHTML = `
       height: var(--lazy-image-height, 100%);
     }
 
-    #placeholder ::slotted(*),
-    :host([intersecting]) #image {
+    :host([fade]) #placeholder:not([aria-hidden="true"]) ::slotted(*),
+    :host([fade]) #image:not([aria-hidden="true"]) {
       opacity: 1;
     }
 
-    #image,
-    :host([intersecting]) #placeholder ::slotted(*) {
+    :host([fade]) #image,
+    :host([fade]) #placeholder[aria-hidden="true"] ::slotted(*) {
       opacity: 0;
     }
   </style>
@@ -97,9 +97,11 @@ class LazyImage extends HTMLElement {
     super();
     this.observerCallback = this.observerCallback.bind(this);
     this.loadImage = this.loadImage.bind(this);
+    this.onLoad = this.onLoad.bind(this);
     this.attachShadow({mode: 'open'});
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     this.shadowImage = this.shadowRoot.getElementById('image');
+    this.shadowImage.onload = this.onLoad;
     this.shadowPlaceholder = this.shadowRoot.getElementById('placeholder');
   }
 
@@ -125,11 +127,13 @@ class LazyImage extends HTMLElement {
    * Sets the intersecting attribute and reload styles if the polyfill is at play.
    */
   loadImage() {
+    this.setAttribute('intersecting', '');
+    this.shadowImage.src = this.src;
+  }
+
+  onLoad(event) {
     this.shadowImage.removeAttribute('aria-hidden');
     this.shadowPlaceholder.setAttribute('aria-hidden', 'true');
-    this.setAttribute('intersecting', '');
-    this.shadowImage.onload = this.loadImage;
-    this.shadowImage.src = this.src;
     this.disconnectObserver();
     this.updateShadyStyles();
   }
