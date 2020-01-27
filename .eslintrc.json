@@ -1,12 +1,21 @@
 {
   "extends": ["eslint:recommended"],
   "env": {
-    "browser": true
+    "browser": true,
+    "es6": true
   },
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaVersion": "2018"
   },
   "rules": {
     "max-len": ["error", { "ignoreComments": true, "ignoreTemplateLiterals": true }]
-  }
+  },
+  "overrides": [{
+      "files": ["*.test.js"],
+      "env": {
+        "browser": true,
+        "mocha": true
+      }
+  }]
 }

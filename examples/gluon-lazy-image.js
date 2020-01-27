@@ -3,6 +3,10 @@ import { GluonElement, html } from 'https://unpkg.com/@gluon/gluon/gluon.js?modu
 const isIntersecting = ({ isIntersecting }) => isIntersecting;
 
 class GluonLazyImage extends GluonElement {
+  static get is() {
+    return 'gluon-lazy-image';
+  }
+
   get template() {
     return html`
       <style>

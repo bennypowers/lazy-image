@@ -39,7 +39,8 @@ template.innerHTML = `
   <img id="image" aria-hidden="true"/>
 `;
 
-window.ShadyCSS && window.ShadyCSS.prepareTemplate(template, tagName);
+/* istanbul ignore next */
+if (window.ShadyCSS) window.ShadyCSS.prepareTemplate(template, tagName);
 
 class LazyImage extends HTMLElement {
   /**
@@ -62,7 +63,7 @@ class LazyImage extends HTMLElement {
    */
   set src(value) {
     this.safeSetAttribute('src', value);
-    if (this.shadowImage && this.intersecting) this.shadowImage.src = value;
+    if (this.intersecting) this.loadImage();
   }
 
   get src() {
@@ -75,21 +76,11 @@ class LazyImage extends HTMLElement {
    */
   set alt(value) {
     this.safeSetAttribute('alt', value);
-    if (this.shadowImage) this.shadowImage.alt = value;
+    this.shadowImage.alt = value;
   }
 
   get alt() {
     return this.getAttribute('alt');
-  }
-
-  set intersecting(value) {
-    if (value) {
-      this.shadowImage.onload = this.setIntersecting;
-      this.shadowImage.src = this.src;
-      this.disconnectObserver();
-    } else {
-      this.removeAttribute('intersecting');
-    }
   }
 
   /**
@@ -100,26 +91,26 @@ class LazyImage extends HTMLElement {
     return this.hasAttribute('intersecting');
   }
 
+  set intersecting(v) {}
+
   constructor() {
     super();
     this.observerCallback = this.observerCallback.bind(this);
-    this.setIntersecting = this.setIntersecting.bind(this);
+    this.loadImage = this.loadImage.bind(this);
+    this.attachShadow({mode: 'open'});
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+    this.shadowImage = this.shadowRoot.getElementById('image');
+    this.shadowPlaceholder = this.shadowRoot.getElementById('placeholder');
   }
 
   connectedCallback() {
     this.setAttribute('role', 'presentation');
+    this.src = this.getAttribute('src');
+    this.alt = this.getAttribute('alt');
+    this.placeholder = this.getAttribute('placeholder');
     this.updateShadyStyles();
-    if (!this.shadowRoot) {
-      this.attachShadow({mode: 'open'});
-      this.shadowRoot.appendChild(template.content.cloneNode(true));
-      this.shadowImage = this.shadowRoot.getElementById('image');
-      this.shadowPlaceholder = this.shadowRoot.getElementById('placeholder');
-      this.src = this.getAttribute('src');
-      this.alt = this.getAttribute('alt');
-      this.placeholder = this.getAttribute('placeholder');
-    }
     if ('IntersectionObserver' in window) this.initIntersectionObserver();
-    else this.intersecting = true;
+    else this.loadImage();
   }
 
   attributeChangedCallback(name, oldVal, newVal) {
@@ -131,22 +122,25 @@ class LazyImage extends HTMLElement {
   }
 
   /**
+   * Sets the intersecting attribute and reload styles if the polyfill is at play.
+   */
+  loadImage() {
+    this.shadowImage.removeAttribute('aria-hidden');
+    this.shadowPlaceholder.setAttribute('aria-hidden', 'true');
+    this.setAttribute('intersecting', '');
+    this.shadowImage.onload = this.loadImage;
+    this.shadowImage.src = this.src;
+    this.disconnectObserver();
+    this.updateShadyStyles();
+  }
+
+  /**
    * When the polyfill is at play, ensure that styles are updated.
    * @protected
    */
   updateShadyStyles() {
-    window.ShadyCSS && window.ShadyCSS.styleElement(this);
-  }
-
-  /**
-   * Sets the intersecting attribute and reload styles if the polyfill is at play.
-   * @protected
-   */
-  setIntersecting() {
-    this.shadowImage.removeAttribute('aria-hidden');
-    this.shadowPlaceholder.setAttribute('aria-hidden', 'true');
-    this.setAttribute('intersecting', '');
-    this.updateShadyStyles();
+    /* istanbul ignore next */
+    if(window.ShadyCSS) window.ShadyCSS.styleElement(this);
   }
 
   /**
@@ -155,7 +149,7 @@ class LazyImage extends HTMLElement {
    * @protected
    */
   observerCallback(entries) {
-    if (entries.some(isIntersecting)) this.intersecting = true;
+    if (entries.some(isIntersecting)) this.loadImage();
   }
 
   /**
@@ -163,6 +157,7 @@ class LazyImage extends HTMLElement {
    * @protected
    */
   initIntersectionObserver() {
+    /* istanbul ignore if */
     if (this.observer) return;
     const rootMargin = '10px';
     this.observer =

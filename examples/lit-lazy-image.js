@@ -3,6 +3,10 @@ import { LitElement, css, html } from 'lit-element';
 const isIntersecting = ({ isIntersecting }) => isIntersecting;
 
 class LitLazyImage extends LitElement {
+  static get is() {
+    return 'lit-lazy-image';
+  }
+
   static get styles() {
     return css`
       :host {
@@ -48,10 +52,6 @@ class LitLazyImage extends LitElement {
         @load="${this.onLoad}"
       />
     `;
-  }
-
-  static get is() {
-    return 'lit-lazy-image';
   }
 
   static get properties() {
