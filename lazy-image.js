@@ -98,10 +98,12 @@ class LazyImage extends HTMLElement {
     this.observerCallback = this.observerCallback.bind(this);
     this.loadImage = this.loadImage.bind(this);
     this.onLoad = this.onLoad.bind(this);
+    this.onError = this.onError.bind(this);
     this.attachShadow({mode: 'open'});
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     this.shadowImage = this.shadowRoot.getElementById('image');
     this.shadowImage.onload = this.onLoad;
+    this.shadowImage.onerror = this.onError;
     this.shadowPlaceholder = this.shadowRoot.getElementById('placeholder');
   }
 
@@ -132,10 +134,15 @@ class LazyImage extends HTMLElement {
   }
 
   onLoad(event) {
+    this.dispatchEvent(new CustomEvent('loadend', {detail: {success: true}}));
     this.shadowImage.removeAttribute('aria-hidden');
     this.shadowPlaceholder.setAttribute('aria-hidden', 'true');
     this.disconnectObserver();
     this.updateShadyStyles();
+  }
+
+  onError(event) {
+    this.dispatchEvent(new CustomEvent('loadend', {detail: {success: false}}));
   }
 
   /**
