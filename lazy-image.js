@@ -8,6 +8,9 @@ template.innerHTML = `
       display: block;
       position: relative;
     }
+    :host([loading]) > #image {
+      display: none;
+    }
 
     #image,
     #placeholder ::slotted(*) {
@@ -130,10 +133,12 @@ class LazyImage extends HTMLElement {
    */
   loadImage() {
     this.setAttribute('intersecting', '');
+    this.setAttribute("loading", '');
     this.shadowImage.src = this.src;
   }
 
   onLoad(event) {
+    this.removeAttribute("loading");
     this.dispatchEvent(new CustomEvent('loadend', {detail: {success: true}}));
     this.shadowImage.removeAttribute('aria-hidden');
     this.shadowPlaceholder.setAttribute('aria-hidden', 'true');
@@ -142,6 +147,7 @@ class LazyImage extends HTMLElement {
   }
 
   onError(event) {
+    this.removeAttribute("loading");
     this.dispatchEvent(new CustomEvent('loadend', {detail: {success: false}}));
   }
 
