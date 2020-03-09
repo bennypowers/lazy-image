@@ -135,11 +135,12 @@ class LazyImage extends HTMLElement {
     this.setAttribute('intersecting', '');
     this.setAttribute("loading", '');
     this.shadowImage.src = this.src;
+    this.dispatchEvent(new CustomEvent('loading-changed', {detail: {loading: true}}));
   }
 
   onLoad(event) {
     this.removeAttribute("loading");
-    this.dispatchEvent(new CustomEvent('loadend', {detail: {success: true}}));
+    this.dispatchEvent(new CustomEvent('loading-changed', {detail: {loading: false, success: true}}));
     this.shadowImage.removeAttribute('aria-hidden');
     this.shadowPlaceholder.setAttribute('aria-hidden', 'true');
     this.disconnectObserver();
@@ -148,7 +149,7 @@ class LazyImage extends HTMLElement {
 
   onError(event) {
     this.removeAttribute("loading");
-    this.dispatchEvent(new CustomEvent('loadend', {detail: {success: false}}));
+    this.dispatchEvent(new CustomEvent('loading-changed', {detail: {loading: false, success: false}}));
   }
 
   /**
