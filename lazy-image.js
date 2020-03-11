@@ -39,7 +39,7 @@ template.innerHTML = `
   <div id="placeholder" aria-hidden="false">
     <slot name="placeholder"></slot>
   </div>
-  <img id="image" aria-hidden="true"/>
+  <img id="image" aria-hidden="true" />
 `;
 
 /* istanbul ignore next */
@@ -57,7 +57,7 @@ class LazyImage extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['src', 'alt'];
+    return ['src', 'alt', 'crossorigin'];
   }
 
   /**
@@ -84,6 +84,19 @@ class LazyImage extends HTMLElement {
 
   get alt() {
     return this.getAttribute('alt');
+  }
+
+  /**
+   * Image alt-text.
+   * @type {String}
+   */
+  set crossorigin(value) {
+    this.safeSetAttribute('crossorigin', value);
+    this.shadowImage.crossOrigin = value;
+  }
+
+  get crossorigin() {
+    return this.getAttribute('crossorigin');
   }
 
   /**
@@ -114,6 +127,7 @@ class LazyImage extends HTMLElement {
     this.setAttribute('role', 'presentation');
     this.src = this.getAttribute('src');
     this.alt = this.getAttribute('alt');
+    this.crossOrigin = this.getAttribute('crossorigin');
     this.placeholder = this.getAttribute('placeholder');
     this.updateShadyStyles();
     if ('IntersectionObserver' in window) this.initIntersectionObserver();
