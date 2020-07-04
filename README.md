@@ -5,7 +5,7 @@
 
 # <lazy-image\>
 
-[Lazily load](https://wp-rocket.me/blog/lazyloading/) your images!
+[Lazily load](https://web.dev/lazy-loading-images/) your images!
 
 ## 🚛 Get it!
 ```
