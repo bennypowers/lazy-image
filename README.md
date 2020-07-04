@@ -5,7 +5,7 @@
 
 # <lazy-image\>
 
-Lazily load your images!
+[Lazily load](https://web.dev/lazy-loading-images/) your images!
 
 ## 🚛 Get it!
 ```
