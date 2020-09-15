@@ -8,6 +8,9 @@ template.innerHTML = `
       display: block;
       position: relative;
     }
+    :host([loading]) > #image {
+      display: none;
+    }
 
     #image,
     #placeholder ::slotted(*) {
@@ -36,7 +39,7 @@ template.innerHTML = `
   <div id="placeholder" aria-hidden="false">
     <slot name="placeholder"></slot>
   </div>
-  <img id="image" aria-hidden="true"/>
+  <img id="image" aria-hidden="true" />
 `;
 
 /* istanbul ignore next */
@@ -54,7 +57,7 @@ class LazyImage extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['src', 'alt'];
+    return ['src', 'alt', 'crossorigin'];
   }
 
   /**
@@ -81,6 +84,19 @@ class LazyImage extends HTMLElement {
 
   get alt() {
     return this.getAttribute('alt');
+  }
+
+  /**
+   * Image alt-text.
+   * @type {String}
+   */
+  set crossorigin(value) {
+    this.safeSetAttribute('crossorigin', value);
+    this.shadowImage.crossOrigin = value;
+  }
+
+  get crossorigin() {
+    return this.getAttribute('crossorigin');
   }
 
   /**
@@ -111,6 +127,7 @@ class LazyImage extends HTMLElement {
     this.setAttribute('role', 'presentation');
     this.src = this.getAttribute('src');
     this.alt = this.getAttribute('alt');
+    this.crossOrigin = this.getAttribute('crossorigin');
     this.placeholder = this.getAttribute('placeholder');
     this.updateShadyStyles();
     if ('IntersectionObserver' in window) this.initIntersectionObserver();
@@ -130,11 +147,14 @@ class LazyImage extends HTMLElement {
    */
   loadImage() {
     this.setAttribute('intersecting', '');
+    this.setAttribute("loading", '');
     this.shadowImage.src = this.src;
+    this.dispatchEvent(new CustomEvent('loading-changed', {detail: {loading: true}}));
   }
 
   onLoad(event) {
-    this.dispatchEvent(new CustomEvent('loadend', {detail: {success: true}}));
+    this.removeAttribute("loading");
+    this.dispatchEvent(new CustomEvent('loading-changed', {detail: {loading: false, success: true}}));
     this.shadowImage.removeAttribute('aria-hidden');
     this.shadowPlaceholder.setAttribute('aria-hidden', 'true');
     this.disconnectObserver();
@@ -142,7 +162,8 @@ class LazyImage extends HTMLElement {
   }
 
   onError(event) {
-    this.dispatchEvent(new CustomEvent('loadend', {detail: {success: false}}));
+    this.removeAttribute("loading");
+    this.dispatchEvent(new CustomEvent('loading-changed', {detail: {loading: false, success: false}}));
   }
 
   /**
