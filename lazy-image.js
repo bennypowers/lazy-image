@@ -130,6 +130,7 @@ class LazyImage extends HTMLElement {
    */
   loadImage() {
     this.setAttribute('intersecting', '');
+    this.disconnectObserver();
     this.shadowImage.src = this.src;
   }
 
