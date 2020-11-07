@@ -9,7 +9,7 @@
 
 ## 🚛 Get it!
 ```
-npm -i -S @power-elements/lazy-image
+npm i -S @power-elements/lazy-image
 ```
 
 ## 📦 Load it!
