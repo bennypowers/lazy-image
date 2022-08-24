@@ -105,7 +105,7 @@ class LazyImage extends HTMLElement {
    */
    set draggable(value) {
     this.safeSetAttribute('draggable', value);
-    this.shadowImage.draggable = value;
+    this.shadowImage.draggable = value !== "false";
   }
 
   get draggable() {
