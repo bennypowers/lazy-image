@@ -57,7 +57,7 @@ class LazyImage extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['src', 'alt', 'crossorigin'];
+    return ['src', 'alt', 'crossorigin', 'draggable'];
   }
 
   /**
@@ -90,13 +90,26 @@ class LazyImage extends HTMLElement {
    * Image alt-text.
    * @type {String}
    */
-  set crossorigin(value) {
+   set crossorigin(value) {
     this.safeSetAttribute('crossorigin', value);
     this.shadowImage.crossOrigin = value;
   }
 
   get crossorigin() {
     return this.getAttribute('crossorigin');
+  }
+
+  /**
+   * Image alt-text.
+   * @type {String}
+   */
+   set draggable(value) {
+    this.safeSetAttribute('draggable', value);
+    this.shadowImage.draggable = value;
+  }
+
+  get draggable() {
+    return this.getAttribute('draggable');
   }
 
   /**
@@ -128,6 +141,7 @@ class LazyImage extends HTMLElement {
     this.src = this.getAttribute('src');
     this.alt = this.getAttribute('alt');
     this.crossOrigin = this.getAttribute('crossorigin');
+    this.draggable = this.getAttribute('draggable');
     this.placeholder = this.getAttribute('placeholder');
     this.updateShadyStyles();
     if ('IntersectionObserver' in window) this.initIntersectionObserver();
@@ -148,6 +162,7 @@ class LazyImage extends HTMLElement {
   loadImage() {
     this.setAttribute('intersecting', '');
     this.setAttribute("loading", '');
+    this.disconnectObserver();
     this.shadowImage.src = this.src;
     this.dispatchEvent(new CustomEvent('loading-changed', {detail: {loading: true}}));
   }

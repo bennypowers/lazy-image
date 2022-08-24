@@ -5,11 +5,11 @@
 
 # <lazy-image\>
 
-Lazily load your images!
+[Lazily load](https://web.dev/lazy-loading-images/) your images!
 
 ## 🚛 Get it!
 ```
-npm -i -S @power-elements/lazy-image
+npm i -S @power-elements/lazy-image
 ```
 
 ## 📦 Load it!
