@@ -148,6 +148,7 @@ class LazyImage extends HTMLElement {
   loadImage() {
     this.setAttribute('intersecting', '');
     this.setAttribute("loading", '');
+    this.disconnectObserver();
     this.shadowImage.src = this.src;
     this.dispatchEvent(new CustomEvent('loading-changed', {detail: {loading: true}}));
   }
