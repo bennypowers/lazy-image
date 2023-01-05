@@ -1,10 +1,19 @@
-import { LitElement, css, html } from 'lit-element';
+import { LitElement, css, html } from 'lit';
 
 const isIntersecting = ({ isIntersecting }) => isIntersecting;
 
 class LitLazyImage extends LitElement {
   static get is() {
     return 'lit-lazy-image';
+  }
+
+  static get properties() {
+    return {
+      alt: { type: String },
+      intersecting: { type: Boolean },
+      src: { type: String },
+      loaded: { type: Boolean, reflect: true },
+    }
   }
 
   static get styles() {
@@ -46,40 +55,24 @@ class LitLazyImage extends LitElement {
       </div>
 
       <img id="image"
-        aria-hidden="${String(!this.intersecting)}"
-        .src="${this.intersecting ? this.src : undefined}"
-        alt="${this.alt}"
-        @load="${this.onLoad}"
-      />
+           aria-hidden="${String(!this.intersecting)}"
+           alt="${this.alt}"
+           .src="${this.intersecting ? this.src : undefined}"
+           @load="${this.#onLoad}">
     `;
-  }
-
-  static get properties() {
-    return {
-      /** Image alt-text. */
-      alt: String,
-
-      /** Whether the element is on screen. */
-      intersecting: Boolean,
-
-      /** Image URI. */
-      src: String,
-
-      /**
-       * Whether the image has loaded.
-       * @type {Boolean}
-       */
-      loaded: {
-        type: Boolean,
-        reflect: true,
-      },
-    }
   }
 
   constructor() {
     super();
-    this.observerCallback = this.observerCallback.bind(this);
+    /** @type{IntersectionObserver} */
+    this.#io;
+    /** Image URI. */
+    this.src = '';
+    /** Image alt-text. */
+    this.alt = '';
+    /** Whether the element is on screen. */
     this.intersecting = false;
+    /** Whether the image has loaded. */
     this.loading = false;
   }
 
@@ -88,28 +81,27 @@ class LitLazyImage extends LitElement {
     // Remove the wrapping `<lazy-image>` element from the a11y tree.
     this.setAttribute('role', 'presentation');
     // if IntersectionObserver is available, initialize it.
-    this.initIntersectionObserver();
+    this.#initIO();
   }
 
+  /** Disconnects and unloads the IntersectionObserver. */
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.disconnectObserver();
+    this.#io.disconnect();
+    this.#io = null;
+    delete this.#io;
   }
 
   /**
    * Sets the `intersecting` property when the element is on screen.
-   * @param  {[IntersectionObserverEntry]} entries
-   * @protected
+   * @param  {IntersectionObserverEntry[]} entries
    */
-  observerCallback(entries) {
+  #observerCallback(entries) {
     if (entries.some(isIntersecting)) this.intersecting = true;
   }
 
-  /**
-   * Sets the `loaded` property when the image is finished loading.
-   * @protected
-   */
-  onLoad(event) {
+  /** Sets the `loaded` property when the image is finished loading. */
+  #onLoad(event) {
     this.loaded = true;
     // Dispatch and event that supports Polymer two-way binding.
     const bubbles = true;
@@ -122,30 +114,17 @@ class LitLazyImage extends LitElement {
     }));
   }
 
-  /**
-   * Initializes the IntersectionObserver when the element instantiates.
-   * @protected
-   */
-  initIntersectionObserver() {
+  /** Initializes the IntersectionObserver when the element instantiates. */
+  #initIO() {
     // if IntersectionObserver is unavailable, simply load the image.
     if (!('IntersectionObserver' in window)) return this.intersecting = true;
     // Short-circuit if observer has already initialized.
-    if (this.observer) return;
+    if (this.#io) return;
     // Start loading the image 10px before it appears on screen
     const rootMargin = '10px';
-    this.observer =
-      new IntersectionObserver(this.observerCallback, { rootMargin });
-    this.observer.observe(this);
-  }
-
-  /**
-   * Disconnects and unloads the IntersectionObserver.
-   * @protected
-   */
-  disconnectObserver() {
-    this.observer.disconnect();
-    this.observer = null;
-    delete this.observer;
+    this.#io =
+      new IntersectionObserver(x => this.#observerCallback(x), { rootMargin });
+    this.#io.observe(this);
   }
 }
 
