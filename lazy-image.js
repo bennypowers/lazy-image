@@ -9,7 +9,8 @@ template.innerHTML = `
       position: relative;
     }
     :host([loading]) > #image {
-      display: none;
+      /* display: none; */
+      visibility: hidden;
     }
 
     #image,
@@ -39,7 +40,7 @@ template.innerHTML = `
   <div id="placeholder" aria-hidden="false">
     <slot name="placeholder"></slot>
   </div>
-  <img id="image" aria-hidden="true" />
+  <img id="image" aria-hidden="true" loading="lazy" />
 `;
 
 /* istanbul ignore next */
