@@ -40,7 +40,7 @@ template.innerHTML = `
   <div id="placeholder" aria-hidden="false">
     <slot name="placeholder"></slot>
   </div>
-  <img id="image" aria-hidden="true" loading="lazy" />
+  <img id="image" aria-hidden="true" />
 `;
 
 /* istanbul ignore next */
